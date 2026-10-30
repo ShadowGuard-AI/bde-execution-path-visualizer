@@ -8,9 +8,8 @@ import shutil
 
 try:
     import jsbeautifier
-    import tldextract
 except ImportError:
-    print("Error: Missing dependencies. Please install jsbeautifier and tldextract.")
+    print("Error: Missing dependencies. Please install jsbeautifier.")
     exit(1)
 
 
@@ -102,7 +101,10 @@ def rename_variables(input_code):
                 counter += 1
 
         for old_name, new_name in renamed_vars.items():
-            input_code = input_code.replace(old_name, new_name)
+            # Word boundaries, not a plain replace: replacing the string
+            # _a would also rewrite the head of _abc and split that
+            # variable into a name nothing else uses.
+            input_code = re.sub(rf"\b{re.escape(old_name)}\b", new_name, input_code)
         return input_code
      except Exception as e:
          logging.error(f"Error renaming variables: {e}")
@@ -110,11 +112,12 @@ def rename_variables(input_code):
 
 
 
-def generate_call_graph(input_file):
+def generate_call_graph(input_file, code=None):
     """Generates a call graph representation using a simplified approach (for demonstration)."""
     try:
-        with open(input_file, "r") as f:
-            code = f.read()
+        if code is None:
+            with open(input_file, "r") as f:
+                code = f.read()
 
         # Basic function call detection (very naive)
         function_calls = re.findall(r"(\w+)\s*\(", code) # Match function calls like functionName(
@@ -153,7 +156,7 @@ def main():
     # Input validation
     if not os.path.isfile(args.input_file):
         logging.error(f"Error: Input file does not exist: {args.input_file}")
-        return
+        raise SystemExit(1)
 
     try:
         # Read the input file
@@ -169,8 +172,10 @@ def main():
             code = rename_variables(code)
 
 
-        # Generate call graph
-        dot_code = generate_call_graph(args.input_file)
+        # The transformed text is what gets graphed. This call used to
+        # re-read the file from disk, so --beautify, --decode_strings and
+        # --rename_variables computed new code and then threw it away.
+        dot_code = generate_call_graph(args.input_file, code)
 
         if dot_code:
             # Write the dot code to the output file
@@ -181,10 +186,13 @@ def main():
             print(f"Call graph written to: {args.output_file}") #For demonstration
         else:
             logging.error("Failed to generate call graph.")
+            raise SystemExit(1)
 
-
+    except SystemExit:
+        raise
     except Exception as e:
         logging.exception(f"An unexpected error occurred: {e}")
+        raise SystemExit(1)
 
 
 # --- Usage Example ---
