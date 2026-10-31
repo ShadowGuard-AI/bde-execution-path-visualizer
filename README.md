@@ -1,7 +1,7 @@
 ![Banner](banner.png)
 
 # bde-Execution-Path-Visualizer
-A command-line tool that generates a call graph visualization of a potentially obfuscated script's execution, focusing on branching logic and function calls to identify suspicious or unusual control flow patterns. Output can be a graphviz dot file. - Focused on Automatically identifies and deobfuscates potentially malicious code snippets (e.g., JavaScript, PowerShell) through behavioral analysis. It uses techniques like string decoding, variable renaming, and control flow simplification to expose the underlying functionality, enabling easier malware analysis and identification of malicious intent without full emulation. Differs from 'analyze' by focusing on code transformation rather than static analysis.
+A command-line tool that writes a Graphviz dot file listing the call shaped names found in a script, as a flat list of edges from one MainScript node. There is no branching or control flow structure in the output: the name matcher also picks up keywords, so words such as `if` and `for` appear in the list as if they were calls, and no function definitions, conditions, or branch targets are represented. Optional steps before listing are jsbeautifier formatting, string decoding, and renaming underscore variables. String decoding covers base64 in the Python `b'...'` literal shape, and hex only inside a quoted `0x` literal such as `'0x41'`; numeric literals outside quotes are left alone. The script being listed is read as text and never run.
 
 ## Install
 `git clone https://github.com/ShadowStrikeHQ/bde-execution-path-visualizer`
@@ -14,7 +14,7 @@ A command-line tool that generates a call graph visualization of a potentially o
 - `-o`: No description provided
 - `-v`: Enable verbose logging
 - `--beautify`: Beautify the input script before analysis.
-- `--decode_strings`: Attempt to decode base64 and hex encoded strings.
+- `--decode_strings`: Attempt to decode encoded strings: base64 in the Python `b'...'` literal shape, and hex only inside a quoted `0x` literal such as `'0x41'`. Numeric literals such as `0x10` outside quotes are left alone.
 - `--rename_variables`: Attempt to rename obfuscated variables.
 
 ## License

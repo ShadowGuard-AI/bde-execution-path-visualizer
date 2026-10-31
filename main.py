@@ -21,7 +21,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 def setup_argparse():
     """Sets up the argument parser for the CLI."""
     parser = argparse.ArgumentParser(
-        description="bde-Execution-Path-Visualizer: Generates a call graph visualization of a script's execution."
+        description="bde-Execution-Path-Visualizer: Writes a dot file with a flat list of call shaped names found in a script. No branching or control flow structure is represented."
     )
     parser.add_argument("input_file", help="The input script file (JavaScript, PowerShell, etc.)")
     parser.add_argument(
@@ -37,7 +37,7 @@ def setup_argparse():
         "--beautify", action="store_true", help="Beautify the input script before analysis."
     )
     parser.add_argument(
-        "--decode_strings", action="store_true", help="Attempt to decode base64 and hex encoded strings."
+        "--decode_strings", action="store_true", help="Attempt to decode encoded strings: base64 in the Python b'...' literal shape, and hex only inside a quoted 0x literal such as '0x41'. Numeric literals such as 0x10 outside quotes are left alone."
     )
     parser.add_argument(
         "--rename_variables", action="store_true", help="Attempt to rename obfuscated variables."
@@ -58,7 +58,12 @@ def beautify_code(input_code):
 
 
 def decode_strings(input_code):
-    """Decodes base64 and hex encoded strings within the code."""
+    """Decodes base64 and hex encoded strings within the code.
+
+    Base64 matching covers the Python b'...' literal shape only. Hex
+    matching covers a quoted 0x literal only; numeric literals outside
+    quotes are left unchanged.
+    """
     try:
         # Decode base64 strings
         base64_pattern = re.compile(r"b\'([A-Za-z0-9+/=]+)\'")
@@ -71,15 +76,24 @@ def decode_strings(input_code):
             except Exception as e:
                 logging.warning(f"Failed to decode base64 string: {match} - {e}")
 
-        # Decode hex encoded strings
-        hex_pattern = re.compile(r"0x([0-9a-fA-F]+)")
-        matches = hex_pattern.findall(input_code)
-        for match in matches:
+        # Decode hex encoded strings, but only inside quotes. A bare
+        # 0x10 in code is a numeric literal, not a string: rewriting it
+        # as a character changed what the code means (0x10 became a raw
+        # control character). A quoted literal such as '0x41' or
+        # "0x48656c6c6f" is a string, so its hex digits decode as bytes.
+        def _decode_quoted_hex(m):
+            quote, digits = m.group(1), m.group(2)
+            if len(digits) % 2:
+                digits = "0" + digits
             try:
-                decoded_char = chr(int(match, 16))
-                input_code = input_code.replace(f"0x{match}", f"'{decoded_char}'")
+                decoded = bytes.fromhex(digits).decode('utf-8', errors='ignore')
             except Exception as e:
-                logging.warning(f"Failed to decode hex string: {match} - {e}")
+                logging.warning(f"Failed to decode hex string: {m.group(0)} - {e}")
+                return m.group(0)
+            return f"{quote}{decoded}{quote}"
+
+        hex_pattern = re.compile(r"(['\"])0x([0-9a-fA-F]+)\1")
+        input_code = hex_pattern.sub(_decode_quoted_hex, input_code)
         return input_code
     except Exception as e:
         logging.error(f"Error decoding strings: {e}")
@@ -88,7 +102,7 @@ def decode_strings(input_code):
 
 def rename_variables(input_code):
      """Renames obfuscated variables to improve readability."""
-     # This is a simplified example. A more robust implementation would require
+     # This is a simplified example. A fuller implementation would require
      # parsing the code and understanding variable scope.
      try:
         variable_pattern = re.compile(r"\b(_\w+)\b") # match underscore starting variables
