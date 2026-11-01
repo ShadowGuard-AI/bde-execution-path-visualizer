@@ -104,6 +104,10 @@ def rename_variables(input_code):
      """Renames obfuscated variables to improve readability."""
      # This is a simplified example. A fuller implementation would require
      # parsing the code and understanding variable scope.
+     # The rename runs over the raw text, so the same word inside a
+     # string literal or a comment is renamed too. For a readability
+     # pass over the graph that is harmless; the transformed text is
+     # never what gets executed, only what gets graphed.
      try:
         variable_pattern = re.compile(r"\b(_\w+)\b") # match underscore starting variables
         matches = variable_pattern.findall(input_code)
@@ -134,13 +138,24 @@ def generate_call_graph(input_file, code=None):
                 code = f.read()
 
         # Basic function call detection (very naive)
+        # Every word followed by a bracket counts, which includes the
+        # language keywords if, for, and while, and the names of
+        # function definitions as well as their call sites. Duplicates
+        # stay in the list, so a name used ten times writes ten
+        # identical edges. The graph is a flat star from MainScript by
+        # design, as the CLI description says; nothing here knows which
+        # function actually called which.
         function_calls = re.findall(r"(\w+)\s*\(", code) # Match function calls like functionName(
 
         dot_code = "digraph ExecutionPath {\n"
         dot_code += "  rankdir=LR;\n"  # Left-to-right layout
         dot_code += "  node [shape=box];\n" # Make nodes boxes
 
-        # Represent the main script as the entry point
+        # The file path is interpolated into the DOT label unescaped.
+        # A path containing a double quote breaks the DOT syntax and
+        # whatever renders the file gets a malformed graph. The call
+        # names below are word characters only, so they cannot do the
+        # same; the label is the one open spot.
         dot_code += f'  "MainScript" [label="{input_file}", shape=ellipse];\n'
 
         for call in function_calls:
