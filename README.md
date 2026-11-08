@@ -1,10 +1,10 @@
-![The sorting office before the doors open: an empty scarred sorting table with a tied bundle seen from behind at its far end, a brass scale with its pan empty and level, rows of tables and pigeonhole grids behind, a stamp sheet lying face down, and tall windows full of dusty morning light](intro-banner.png)
+![Maypole ribbons close up where they converge at the crown: cream and crimson ribbons plaited around the pole at the garland and running straight out from it, dancers and the green soft behind](intro-banner.png)
 
 # bde-Execution-Path-Visualizer
 
-![A London sorting office in 1840 with sorting tables in rows, clerks holding tied bundles, pigeonholes filling the back wall, a letter held up close at the right with its Penny Black and red postmark, and the name bde-execution-path-visualizer on the carbon blue direction board above the central aisle](banner.png)
+![A village green with a tall white maypole at its centre, dancers in plain dress holding cream ribbons that run in straight taut lines from the crown of the pole, one crimson ribbon crossing the frame, a church and a crowd behind](banner.png)
 
-![A Penny Black stamp drawn square and close, straight scissor cut edges, the queen profile facing left in white against a black ground, corner letters in the lower squares, and a red postmark arc crossing its upper right, the heading plate](logo.png)
+![The crown of a white maypole seen against a plain sky, cream ribbons running straight out from its centre in every direction and two crimson ribbons among them at the lower left, the heading plate](logo.png)
 
 ![Sorting office scene in three depths: pigeonholes brighten in turn along the far wall, bundles advance along the central table in short stops while a postmark arc fades in over each, dust drifts down in the near window shafts, and the brass scale pan sits level and still](scene.svg)
 
