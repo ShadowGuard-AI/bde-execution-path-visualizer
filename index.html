@@ -3,98 +3,101 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>bde-execution-path-visualizer: Penny Post and the Uniform Rate Revolution</title>
-<meta name="description" content="A script read as text and never run, its call shaped names listed as a flat list of edges from one MainScript node into a Graphviz dot file.">
+<title>bde-execution-path-visualizer: The Maypole Ring</title>
 <style>
-@font-face{font-family:'Bahianita';src:url('fonts/Bahianita.ttf') format('truetype');}
-@font-face{font-family:'Cabin';src:url('fonts/Cabin.ttf') format('truetype');}
-:root{--paper:#f7f3e8;--oak:#a8875c;--oakd:#7d6242;--blue:#18345e;--ink:#1c1a18;--red:#ba261f;--hole:#2a241e}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Cabin',sans-serif;line-height:1.65}
-h1,h2,h3{font-family:'Bahianita',cursive;font-weight:400}
-.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;background:#efe9da}
-.hero img.heroimg{width:100%;height:58vh;object-fit:cover;display:block}
-.hero .in{padding:1rem 6vw 2rem;max-width:1120px;margin:0 auto;width:100%}
-.logo{width:200px}
-main{padding:0 6vw 3rem;max-width:1120px;margin:0 auto}
-nav{display:flex;gap:1rem;flex-wrap:wrap;margin:1.2rem 0}
-.stamp{display:inline-block;text-decoration:none;color:#fff;font-family:'Bahianita',cursive;font-size:1.1rem;width:158px;height:118px;background:#17150f;position:relative;padding:64px 8px 0;text-align:center;line-height:1.05;box-shadow:2px 3px 0 rgba(28,26,24,.25)}
-.stamp::before{content:'';position:absolute;left:50%;top:12px;width:34px;height:42px;margin-left:-17px;background:#efece2;border-radius:48% 48% 44% 44%}
-.stamp::after{content:'';position:absolute;right:-4px;top:-4px;width:52px;height:52px;border:5px solid transparent;border-top-color:var(--red);border-radius:50%;opacity:0;transition:opacity .15s}
-.stamp:hover::after{opacity:.55}
-.stamp:active::after{opacity:1}
-.stamp:focus-visible{outline:3px solid var(--blue);outline-offset:4px}
-a{color:var(--blue)}
-a::before{content:'';display:inline-block;width:15px;height:15px;margin-right:.45em;vertical-align:-2px;border:3px solid rgba(186,38,31,.45);border-left-color:transparent;border-bottom-color:transparent;border-radius:50%;transition:border-color .15s}
-a:hover::before{border-top-color:var(--red);border-right-color:var(--red)}
-.stamp::before{border-radius:48% 48% 44% 44%}
-nav a::before{content:'';display:none}
-.hole{background:linear-gradient(180deg,var(--oak) 0 44px,#c9ae83 44px 50px,var(--hole) 50px);border:5px solid var(--oakd);border-radius:6px;padding:52px 1.5rem 1.2rem;margin:1.8rem 0;color:#f2ecdc;box-shadow:inset 0 18px 30px rgba(0,0,0,.45)}
-.hole h2{color:#fff;margin:.1rem 0 .5rem;font-size:2rem}
-.hole p{max-width:62ch}
-pre{background:#14161c;color:#f2ecdc;padding:1rem;overflow-x:auto;font-size:.95rem}
-.string{height:12px;margin:2.2rem 0;position:relative;background:repeating-linear-gradient(to right,transparent 0 44px,rgba(28,26,24,.75) 44px 47px,transparent 47px 92px),linear-gradient(var(--ink),var(--ink));background-size:100% 12px,100% 2px;background-position:0 0,0 5px;background-repeat:no-repeat}
-.string::after{content:'';position:absolute;right:6px;top:1px;width:11px;height:11px;border:3px solid var(--ink);border-radius:50%}
-.note{background:#fff;color:var(--ink);border:2px solid #d8d2c2;padding:.2rem 1.3rem 1rem;margin:1.3rem 0;position:relative;overflow:hidden}
-.note::after{content:'';position:absolute;right:-16px;top:-16px;width:74px;height:74px;border:6px solid rgba(186,38,31,.6);border-radius:50%}
-.note h3{font-size:1.6rem;margin:.7rem 0 .3rem}
-.pass{display:inline-block;vertical-align:top;width:31%;min-width:230px;margin-right:1%}
-.param{display:flex;gap:1rem;padding:.55rem 0;border-bottom:1px solid rgba(242,236,220,.25)}
-.param b{font-family:'Bahianita',cursive;font-weight:400;font-size:1.2rem;min-width:150px}
-.absent{color:#ffb3ae;font-weight:700}
-footer{padding:1rem 6vw 2.4rem;max-width:1120px;margin:0 auto}
+@font-face { font-family: "Yatra One"; src: url("fonts/YatraOne-400.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "Kodchasan"; src: url("fonts/Kodchasan-400.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "Kodchasan"; src: url("fonts/Kodchasan-700.woff2") format("woff2"); font-weight: 700; }
+:root {
+  --sky: #eef4ea; --field: #f7f9f2; --ink: #2f3a2c; --soft: #6b7563;
+  --crimson: #a31621; --green: #4a7c59; --line: #d8dfc9; --card: #ffffff;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--field); color: var(--ink); font-family: "Kodchasan", sans-serif; line-height: 1.55; }
+.wrap { max-width: 960px; margin: 0 auto; padding: 0 20px 64px; }
+header.hero { text-align: center; padding: 52px 0 8px; }
+img.hero-logo { width: min(430px, 82vw); border-radius: 50%; box-shadow: 0 10px 34px rgba(47,58,44,.22); }
+h1, h2 { font-family: "Yatra One", serif; font-weight: 400; line-height: 1.15; }
+h1 { font-size: clamp(28px, 5vw, 46px); margin: 26px 0 6px; }
+.tagline { color: var(--soft); font-size: 19px; margin: 0 auto; max-width: 660px; }
+.btns { margin: 22px 0 6px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+a.btn { font-family: "Yatra One", serif; text-decoration: none; padding: 11px 22px; border-radius: 999px; border: 2px solid var(--green); color: var(--green); background: transparent; }
+a.btn.solid { background: var(--crimson); border-color: var(--crimson); color: #fff; }
+figure { margin: 30px 0; }
+figure img { width: 100%; border-radius: 10px; display: block; box-shadow: 0 8px 28px rgba(47,58,44,.18); }
+figcaption { color: var(--soft); font-size: 15px; text-align: center; margin-top: 9px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 34px 0; }
+.fact { background: var(--card); border: 1px solid var(--line); border-top: 5px solid var(--crimson); border-radius: 8px; padding: 14px 16px; }
+.fact b { display: block; font-family: "Yatra One", serif; font-weight: 400; font-size: 15px; letter-spacing: .04em; text-transform: uppercase; color: var(--green); margin-bottom: 4px; }
+section { margin: 38px 0; }
+h2 { font-size: 27px; margin: 0 0 12px; border-bottom: 2px solid var(--line); padding-bottom: 7px; }
+code, pre { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+pre { background: #2c3628; color: #f0f3e6; padding: 15px 18px; border-radius: 8px; overflow-x: auto; font-size: 14.5px; }
+table { border-collapse: collapse; width: 100%; background: var(--card); }
+th, td { border: 1px solid var(--line); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { font-family: "Yatra One", serif; font-weight: 400; background: var(--sky); }
+.hold { background: #fbf3ec; border: 1px solid #e8cdb8; border-left: 6px solid var(--crimson); border-radius: 8px; padding: 16px 20px; }
+.hold h2 { border: none; padding: 0; }
+.hold ul { margin: 8px 0 4px; padding-left: 20px; }
+footer { margin-top: 52px; border-top: 2px solid var(--line); padding-top: 16px; color: var(--soft); font-size: 14.5px; text-align: center; }
 </style>
 </head>
 <body>
+<div class="wrap">
 <header class="hero">
-<img class="heroimg" src="assets/intro-banner.png" alt="The sorting office before the doors open: empty tables, pigeonhole grids, slumped mail bags, a brass scale with its pan empty, and tall windows full of dusty morning light, nothing that can be read">
-<div class="in">
-<img class="logo" src="assets/logo.png" alt="A Penny Black stamp square and close, the queen profile facing left in white against black, a red postmark arc over its upper right corner, and the name bde-execution-path-visualizer below in carbon blue">
-<h1>bde-execution-path-visualizer</h1>
-<p>The sorting table read from the incoming end to the bagging end. The penny post took every letter from its place of origin and sent it onward under one mark. This tool takes call shaped names from a script and lists each one outward from a single MainScript node, names, keywords, and all.</p>
-<nav>
-<a class="stamp" href="#list">List the Names</a>
-<a class="stamp" href="#passes">Beautify First</a>
-<a class="stamp" href="#passes">Decode Strings</a>
-<a class="stamp" href="#passes">Rename Variables</a>
-</nav>
-</div>
+  <img class="hero-logo" src="assets/logo.png" alt="The crown of a white maypole seen against a plain sky, cream ribbons running straight out from its centre in every direction and two crimson ribbons among them at the lower left">
+  <h1>bde-execution-path-visualizer</h1>
+  <p class="tagline">The Maypole Ring. A command line tool that writes a Graphviz dot file listing the call shaped names found in a script, every one of them a straight line out from a single MainScript node. No ribbon branches, and none are drawn.</p>
+  <div class="btns">
+    <a class="btn solid" href="https://github.com/ShadowGuard-AI/bde-execution-path-visualizer">The repository</a>
+    <a class="btn" href="https://github.com/ShadowGuard-AI/bde-execution-path-visualizer/blob/main/main.py">main.py</a>
+  </div>
 </header>
-<main>
-<section class="hole" id="list"><h2>Read, Never Run</h2>
-<p>The script being listed is read as text and is never run. That is said first and plainly, because a visitor who fears the tool executes unknown code should be answered before any other fact.</p>
-<h2>A Flat List From MainScript</h2>
-<p>The output is a Graphviz dot file listing the call shaped names found in a script, as a flat list of edges from one MainScript node.</p>
-<div class="note"><h3>No Branches Are Drawn</h3>
-<p>There is no branching or control flow structure in the output. The name matcher also picks up keywords, so words such as if and for appear in the list as if they were calls. No function definitions, conditions, or branch targets are represented. A visitor who came expecting a drawn path through a program leaves knowing the file is a flat list, and this panel says so at reading size, not in a footnote.</p></div>
+
+<figure>
+  <img src="assets/intro-banner.png" alt="Maypole ribbons close up where they converge at the crown: cream and crimson ribbons plaited around the pole at the garland and running straight out from it, dancers and the green soft behind">
+  <figcaption>Every ribbon meets at the one crown, and runs straight out from it.</figcaption>
+</figure>
+
+<div class="facts">
+  <div class="fact"><b>Output</b>A Graphviz dot file listing the call shaped names found in a script</div>
+  <div class="fact"><b>Shape</b>A flat list of edges from one MainScript node</div>
+  <div class="fact"><b>Optional steps</b>jsbeautifier formatting, string decoding, and renaming underscore variables before listing</div>
+  <div class="fact"><b>The listed script</b>Read as text and never run</div>
+</div>
+
+<section>
+  <h2>Parameters</h2>
+  <table>
+    <tr><th>Option</th><th>What the README records</th></tr>
+    <tr><td><code>-o</code></td><td>No description provided. This site does not guess that it names the output dot file.</td></tr>
+    <tr><td><code>-v</code></td><td>Enable verbose logging.</td></tr>
+    <tr><td><code>--beautify</code></td><td>Beautify the input script before analysis (jsbeautifier formatting).</td></tr>
+    <tr><td><code>--decode_strings</code></td><td>Attempt to decode encoded strings: base64 in the Python <code>b'...'</code> literal shape, and hex only inside a quoted <code>0x</code> literal such as <code>'0x41'</code>.</td></tr>
+    <tr><td><code>--rename_variables</code></td><td>Attempt to rename obfuscated variables (renaming underscore variables).</td></tr>
+    <tr><td><code>-h</code></td><td>Show help message and exit.</td></tr>
+  </table>
 </section>
-<div class="string"></div>
-<section class="hole" id="passes"><h2>The Three Passes</h2>
-<div class="pass"><h3>Beautify First</h3><p>jsbeautifier formatting under --beautify, run before listing.</p></div>
-<div class="pass"><h3>Decode Strings</h3><p>String decoding under --decode_strings, covering base64 in the Python b'...' literal shape, and hex only inside a quoted 0x literal such as '0x41'. Numeric literals outside quotes are left alone, and the source example 0x10 is the case that is not touched.</p></div>
-<div class="pass"><h3>Rename Variables</h3><p>Variable renaming under --rename_variables. The opening account describes it as renaming underscore variables, and the parameter list describes it as an attempt to rename obfuscated variables. Both wordings are kept, because the source uses both.</p></div>
-<p>Verbose logging under -v belongs on this row as a reporting switch, not a pass.</p>
+
+<figure>
+  <img src="assets/banner.png" alt="A village green with a tall white maypole at its centre, dancers in plain dress holding cream ribbons that run in straight taut lines from the crown of the pole, one crimson ribbon crossing the frame, a church and a crowd behind">
+  <figcaption>The whole ring at once: one pole, one flat ring of straight lines.</figcaption>
+</figure>
+
+<section class="hold">
+  <h2>Stated limits</h2>
+  <ul>
+    <li>There is no branching or control flow structure in the output, and no function definitions, conditions, or branch targets are represented.</li>
+    <li>The name matcher also picks up keywords, so words such as <code>if</code> and <code>for</code> appear in the list as if they were calls.</li>
+    <li>String decoding covers base64 in the Python <code>b'...'</code> literal shape, and hex only inside a quoted <code>0x</code> literal such as <code>'0x41'</code>; numeric literals outside quotes are left alone.</li>
+    <li>The script being listed is read as text and never run.</li>
+    <li><code>-o</code> is listed with no description provided, and no purpose is guessed for it here.</li>
+  </ul>
 </section>
-<div class="string"></div>
-<section class="hole"><h2>Bagging End: Getting It and Calling It</h2>
-<pre>git clone https://github.com/ShadowStrikeHQ/bde-execution-path-visualizer</pre>
-<p>The install line is exactly as written. Beside it, a short note: the clone names ShadowStrikeHQ while this repository lives under ShadowGuard-AI.</p>
-<pre>./bde-execution-path-visualizer [params]</pre>
-<div class="param"><b>-h</b><span>Show help message and exit</span></div>
-<div class="param"><b>-v</b><span>Enable verbose logging</span></div>
-<div class="param"><b>--beautify</b><span>Beautify the input script before analysis.</span></div>
-<div class="param"><b>--decode_strings</b><span>Attempt to decode encoded strings: base64 in the Python b'...' literal shape, and hex only inside a quoted 0x literal such as '0x41'. Numeric literals such as 0x10 outside quotes are left alone.</span></div>
-<div class="param"><b>--rename_variables</b><span>Attempt to rename obfuscated variables.</span></div>
-<h2>The Unexplained Switch</h2>
-<div class="param"><b>-o</b><span class="absent">No description provided. This page will not guess that it names the output dot file, however likely that guess feels.</span></div>
-<p>One further absence is stated on this panel: the parameter list names no input script argument, even though the tool works on a script, so how the script is handed to the program is not spelled out in the source.</p>
-<p><a href="https://github.com/ShadowGuard-AI/bde-execution-path-visualizer">The repository on GitHub</a></p>
-</section>
-<div class="string"></div>
-<section class="hole"><h2>Licence</h2>
-<p>The table closes with the line as written, with no licence named, reproduced as written:</p>
-<pre>Copyright (c) ShadowStrikeHQ</pre>
-</section>
-</main>
-<footer><p>Theme: Penny Post and the Uniform Rate Revolution. Type: Bahianita for display, Cabin for reading, both SIL Open Font License 1.1. The lettering reference Heavy Black was reference only and is not embedded.</p></footer>
+
+<footer>
+  <p>The README of bde-execution-path-visualizer closes with a copyright line naming ShadowStrikeHQ and names no licence. Site type is set in Yatra One and Kodchasan, self-hosted under the SIL Open Font License.</p>
+</footer>
+</div>
 </body>
 </html>
